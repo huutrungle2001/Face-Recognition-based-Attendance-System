@@ -31,7 +31,12 @@ def main_begin():
 
     
     def Attendence():
-        recognizer = cv2.face.LBPHFaceRecognizer_create()#cv2.createLBPHFaceRecognizer()
+        attendance_window = Tk()
+        attendance_window.title("Hệ thống điểm danh")
+        attendance_window.geometry('500x600')
+        attendance_window.configure(background="orange")
+
+        recognizer = cv2.face.LBPHFaceRecognizer_create()
         recognizer.read("TrainingImageLabel\Trainner.yml")
         harcascadePath = "haarcascade_frontalface_default.xml"
         faceCascade = cv2.CascadeClassifier(harcascadePath);    
@@ -75,6 +80,7 @@ def main_begin():
         # #print(attendance)
         # res=attendance
         # mbox.showinfo("Information", res)
+        attendance_window.mainloop()
         return attendance
 
     def check():
