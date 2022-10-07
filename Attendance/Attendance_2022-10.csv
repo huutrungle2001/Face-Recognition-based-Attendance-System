@@ -1,0 +1,7 @@
+Id,Name,Day,Time,Status,IsLate
+19010046,['DuyAnh'],07,07:36:42,Come,False
+19010046,['DuyAnh'],07,17:04:00,Go,False
+19010046,['DuyAnh'],06,19:17:27,Come,True
+19010046,['DuyAnh'],06,22:26:54,Go,True
+19010047,['Chau'],07,09:09:14,Come,True
+
