@@ -1,68 +1,22 @@
-import tkinter
-import cv2
-import time
-import PIL.Image, PIL.ImageTk
-import tkinter.messagebox
-class MyVideoCapture:
-    def __init__(self, video_source):
-        self.vid = cv2.VideoCapture(video_source)
-        if not self.vid.isOpened():
-            raise ValueError("Unable to open video source",video_source)
-        self.width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
-        self.height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
+import PySimpleGUI as sg
 
-    def __del__(self):
-        if self.vid.isOpened():
-            self.vid.release()
+print(sg.version)
+print(sg)
 
-    def get_frame(self):
-        if self.vid.isOpened():
-            ret, frame = self.vid.read()
-            frame = cv2.resize(frame,(640,480))
-            if ret:
-                return (ret, cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-            else:
-                return (ret,None)
+sg.change_look_and_feel('Light Brown 1')
 
-class App:
-    def __init__(self, window, window_title,video_source = 0, fpsLimit = 30):
+background = sg.LOOK_AND_FEEL_TABLE['LightBrown1']['BACKGROUND']
 
-        self.window = window
-        self.window.title(window_title)
+layout = [  [sg.Text('My Window')],
+            [sg.Button('test', image_data=sg.DEFAULT_BASE64_ICON, border_width=0, use_ttk_buttons=True, button_color=('black',background)),
+             sg.Button('Exit')]  ]
 
-        self.video_source = video_source
-        self.fpsLimit = fpsLimit
+window = sg.Window('Window Title', layout, use_default_focus=False)
 
-        self.vid = MyVideoCapture(video_source)    
-        self.canvas = tkinter.Canvas(window, width = self.vid.width, height = self.vid.height)
-        self.canvas.pack()
-        self.btn_getvideo=tkinter.Button(window, text="getvideo", width=50, command=self.getvideo)
-        self.btn_getvideo.pack(anchor=tkinter.CENTER, expand=True)
-        self.delay = 1
-        self.update()
-
-        self.window.mainloop()
-    def getvideo(self):
-        start_time = time.time()
-        out = cv2.VideoWriter('output_'+time.strftime("%d-%m-%Y-%H-%M-%S")+'.avi', cv2.VideoWriter_fourcc(*'XVID'), 20.0, (640,480))
-
-        while int(time.time()-start_time) < self.fpsLimit:           
-            ret, frame = self.vid.get_frame()
-            if ret:
-                out.write(cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
-            else:
-                break
-        out.release()
-        # tkinter.messagebox.showinfo(title="Notification", message="save video successful")
-        print("success")
-        cv2.destroyAllWindows()
-
-
-    def update(self):
-        ret, frame = self.vid.get_frame()
-        if ret:
-            self.photo = PIL.ImageTk.PhotoImage(image = PIL.Image.fromarray(frame))
-            self.canvas.create_image(0, 0, image = self.photo, anchor = tkinter.NW)
-        self.window.after(self.delay, self.update)
-        
-App(tkinter.Tk(), "get_video",0,10)
+while True:             # Event Loop
+    event, values = window.read()
+    print(event, values)
+    if event in (None, 'Exit'):
+        break
+    window['test'].update(image_data=sg.PSG_DEBUGGER_LOGO)
+window.close()

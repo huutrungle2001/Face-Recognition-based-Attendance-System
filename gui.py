@@ -20,14 +20,14 @@ import tkinter.ttk as ttk
 import tkinter.font as font
 import show_attendance
 import pyttsx3
-from login import login_screen
+
 def text_to_speech(user_text):
     engine = pyttsx3.init()
     engine.say(user_text)
     engine.runAndWait()
 
-def openmain(data_user):
-    window = Tk()
+def openmain(data_user,window_1):
+    window = Toplevel()
     window.title("Hệ thống điểm danh")
     window.geometry('1000x700')
     window.configure(background="orange")
@@ -280,8 +280,11 @@ def openmain(data_user):
     resize_image_5 = image_5.resize((40, 40))
 
     img_5 = ImageTk.PhotoImage(resize_image_5)  
+    def dangxuat():
+        window_1.deiconify()
+        window.destroy()
 
-    button_5 = Button(frame_2, command=login_screen, text = '    Thoát    ', font=('times',12,'bold'), image = img_5, compound = TOP, bg ='white', borderwidth=0)
+    button_5 = Button(frame_2, command=dangxuat, text = ' Đăng xuất ', font=('times',12,'bold'), image = img_5, compound = TOP, bg ='white', borderwidth=0)
     button_5.place(x = 8, y = 370)
     #==========================================================================================>
     frame_3 = Frame(frame, width= "800", bg="light blue", height="530", relief="solid", borderwidth=2)
