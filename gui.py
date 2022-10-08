@@ -20,7 +20,7 @@ import tkinter.ttk as ttk
 import tkinter.font as font
 import show_attendance
 import pyttsx3
-
+from login import login_screen
 def text_to_speech(user_text):
     engine = pyttsx3.init()
     engine.say(user_text)
@@ -273,6 +273,7 @@ def openmain(data_user):
     button_4 = Button(frame_2, text = '    Hỗ trợ   ', font=('times',12,'bold'), image = img_4, compound = TOP, bg ='white', borderwidth=0, command=support)
     button_4.place(x = 8, y = 250)
 
+    
 
     image_5 = Image.open("IconImage/4.png")
 
@@ -280,7 +281,7 @@ def openmain(data_user):
 
     img_5 = ImageTk.PhotoImage(resize_image_5)  
 
-    button_5 = Button(frame_2, command=window.destroy, text = '    Thoát    ', font=('times',12,'bold'), image = img_5, compound = TOP, bg ='white', borderwidth=0)
+    button_5 = Button(frame_2, command=login_screen, text = '    Thoát    ', font=('times',12,'bold'), image = img_5, compound = TOP, bg ='white', borderwidth=0)
     button_5.place(x = 8, y = 370)
     #==========================================================================================>
     frame_3 = Frame(frame, width= "800", bg="light blue", height="530", relief="solid", borderwidth=2)
