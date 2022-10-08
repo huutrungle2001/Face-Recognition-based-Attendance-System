@@ -31,11 +31,6 @@ def main_begin():
 
     
     def Attendence():
-        attendance_window = Tk()
-        attendance_window.title("Hệ thống điểm danh")
-        attendance_window.geometry('500x600')
-        attendance_window.configure(background="orange")
-
         recognizer = cv2.face.LBPHFaceRecognizer_create()
         recognizer.read("TrainingImageLabel\Trainner.yml")
         harcascadePath = "haarcascade_frontalface_default.xml"
@@ -43,11 +38,14 @@ def main_begin():
         df=pd.read_csv("StudentDetails\StudentDetails.csv")
         cam = cv2.VideoCapture(0)
         font = cv2.FONT_HERSHEY_SIMPLEX        
-        col_names =  ['Id','Name','Day','Time','Status','IsLate']
+        col_names =  ['Id','Name','Month','Day','Time','Status','IsLate']
         attendance = pd.DataFrame(columns = col_names)   
         while True:
             ret, im =cam.read()
             gray=cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
+            image = Image.fromarray(gray)
+            image = ImageTk.PhotoImage(image)
+
             faces=faceCascade.detectMultiScale(gray, 1.2,5)    
             for(x,y,w,h) in faces:
                 cv2.rectangle(im,(x,y),(x+w,y+h),(225,0,0),2)
@@ -61,7 +59,7 @@ def main_begin():
                     tt=str(Id)+"-"+aa
                     Status = None
                     IsLate = False
-                    attendance.loc[len(attendance)] = [Id,aa,Day,timeStamp,Status,IsLate]
+                    attendance.loc[len(attendance)] = [Id,aa,Month,Day,timeStamp,Status,IsLate]
     
                 else:
                     Id='Unknown'                
@@ -70,7 +68,7 @@ def main_begin():
                     noOfFile=len(os.listdir("ImagesUnknown"))+1
                     cv2.imwrite("ImagesUnknown\Image"+str(noOfFile) + ".jpg", im[y:y+h,x:x+w])            
                 cv2.putText(im,str(tt),(x,y+h), font, 1,(255,255,255),2)        
-            attendance=attendance.drop_duplicates(subset=['Id'],keep='first')    
+            attendance=attendance.drop_duplicates(subset=['Id'],keep='first')   
             cv2.imshow('im',im)
             if (cv2.waitKey(1)==ord('q')):
                 break
@@ -80,13 +78,81 @@ def main_begin():
         # #print(attendance)
         # res=attendance
         # mbox.showinfo("Information", res)
-        attendance_window.mainloop()
         return attendance
 
     def check():
         attendance = Attendence()
-        text = check_attendence(attendance)
-        mbox.showinfo("Nofication", text)
+        thongtin = attendance
+        text, duocdiemdanh= check_attendence(attendance)
+        attendence_window = Toplevel(window)
+        attendence_window.title("Hệ thống điểm danh")
+        attendence_window.geometry('500x600')
+        attendence_window.configure(background="orange")
+
+        bg_window = Image.open("./IconImage/login-back.png")
+        photo =  ImageTk.PhotoImage(bg_window)
+        bg_panel = Label(attendence_window, image=photo)
+        bg_panel.image = photo
+        bg_panel.pack(fill='both', expand="yes")
+
+        frame_1 = Frame(attendence_window, width= "400", bg="black", height="500", relief="solid", borderwidth=2)
+
+        frame_1.place(x = 50, y = 50)
+        if duocdiemdanh == False:
+            sign_in_image = Image.open('./IconImage/failed.jpg')
+            nofication = "Failed!"
+        else:
+            sign_in_image = Image.open('./IconImage/success.png')
+            nofication = 'Success!'
+
+        photo = ImageTk.PhotoImage(sign_in_image)
+        sign_in_image_label = Label(frame_1, image=photo, bg='#040405')
+        sign_in_image_label.image = photo
+        sign_in_image_label.place(x=140, y=50)
+
+
+
+        sign_in_label = Label(frame_1, text=nofication, bg="#040405", fg="white",
+							font=("yu gothic ui", 17, "bold"))
+
+        sign_in_label.place(x=150, y=160)
+
+
+        label_1 = Label(frame_1, text="MNV", bg="#040405", fg="white",
+								font=("yu gothic ui", 13, "bold"))
+        label_1.place(x=70, y=220)
+
+        label_1_entry = Label(frame_1, highlightthickness=1, relief=FLAT, bg="#040405", fg="white",
+                                    font=("yu gothic ui ", 12, "bold"))
+        label_1_entry.place(x=70, y=245, width=270)
+
+        label_2 = Label(frame_1, text="Họ và tên", bg="#040405", fg="white",
+								font=("yu gothic ui", 13, "bold"))
+        label_2.place(x=70, y=280)
+
+        label_2_entry = Label(frame_1, highlightthickness=1, relief=FLAT, bg="#040405", fg="white",
+                                    font=("yu gothic ui ", 12, "bold"))
+        label_2_entry.place(x=70, y=305, width=270)
+
+        label_3 = Label(frame_1, text="Thông tin", bg="#040405", fg="white",
+								font=("yu gothic ui", 13, "bold"))
+        label_3.place(x=70, y=340)
+
+        label_3_entry = Label(frame_1, highlightthickness=1, relief=FLAT, bg="#040405", fg="white",
+                                    font=("yu gothic ui ", 12, "bold"))
+        label_3_entry.place(x=70, y=365, width=270, height=110)
+
+        Id = thongtin.Id.values
+        df=pd.read_csv("StudentDetails\StudentDetails.csv")
+        aa= df.loc[df['Id'] == Id[0]].values
+
+        label_1_entry.configure(text=str(aa[0][0]))
+        label_2_entry.configure(text=str(aa[0][1]))
+        label_3_entry.configure(text=str(aa[0][2]))   
+
+        attendence_window.mainloop()
+
+
     data_user = []
 
     window = Tk()
@@ -94,7 +160,7 @@ def main_begin():
     window.geometry('500x600')
     window.configure(background="orange")
 
-    bg_window = Image.open("IconImage/1.jpg")
+    bg_window = Image.open("IconImage/login-back.png")
     photo =  ImageTk.PhotoImage(bg_window)
     bg_panel = Label(window, image=photo)
     bg_panel.image = photo
@@ -124,11 +190,15 @@ def main_begin():
         date = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
         timeStamp = datetime.datetime.fromtimestamp(ts).strftime('%H:%M:%S')
         Hour,Minute,Second=timeStamp.split(":")
+
         if  Hour == "07" and Minute == "00" and Second == "00":
+
             text_to_speech("Start to work now!")
+
         elif  Hour == "17" and Minute == "00" and Second == "00":
+
             text_to_speech("Start to work now!")
-        
+
     my_font=("yu gothic ui", 13, "bold") # display size and style
 
     l1=tk.Label(frame,font=my_font,bg='black',fg='white')
@@ -169,7 +239,5 @@ def main_begin():
     button.place(x=300, y=410)
 
     window.mainloop()
-
-    return window
 
 main_begin()
