@@ -21,10 +21,10 @@ import pyttsx3
 import tkinter.messagebox as mbox
 import io
 from gui import openmain
-def login_screen():
+def login_screen(window_1):
 	data_user = []
 
-	window = Tk()
+	window = Toplevel()
 	window.title("Hệ thống điểm danh")
 	window.geometry('700x700')
 	window.configure(background="orange")
@@ -73,8 +73,8 @@ def login_screen():
 					mbox.showerror("Error", "Sai mật khẩu hoặc tên tài khoản")
 				else:
 					mbox.showinfo("Information", "Đã đăng nhập được rồi nhé =))")
-					window.destroy()
-					openmain(data_user)
+					window.withdraw()
+					openmain(data_user, window)
 
 	frame = Frame(window, width= "630", bg="black", height="600", relief="solid", borderwidth=2)
 
@@ -169,14 +169,14 @@ def login_screen():
 
 	# =====================================================================
 	
-	# def back():
-	# 	window.withdraw
-	# 	window_2 = main_begin()
-	# 	window_2.deiconify()
+	def back():
+		window_1.deiconify()
+		window.destroy()
+
 	image = Image.open("IconImage/4.png")
 	resize_image = image.resize((40, 40))
 	img = ImageTk.PhotoImage(resize_image)  
-	button = Button(frame, command=window.destroy, text='OUT',fg = 'white',  font=('times',14,'bold'), image = img, borderwidth=0, bg ='#040405', compound = TOP)
-	button.place(x=470, y=500)
+	button = Button(frame, command=back, text='Back',fg = 'white',  font=('times',14,'bold'), image = img, borderwidth=0, bg ='#040405', compound = TOP)
+	button.place(x=500, y=500)
 	
 	mainloop()
