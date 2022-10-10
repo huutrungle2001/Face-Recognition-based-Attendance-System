@@ -280,11 +280,7 @@ def openmain(data_user):
 
     img_5 = ImageTk.PhotoImage(resize_image_5)  
 
-<<<<<<< HEAD
-    button_5 = Button(frame_2, command=window.destroy, text = '    Thoát    ', font=('times',12,'bold'), image = img_5, compound = TOP, bg ='white', borderwidth=0)
-=======
     button_5 = Button(frame_2, command=login_screen, text = '    Thoát    ', font=('times',12,'bold'), image = img_5, compound = TOP, bg ='white', borderwidth=0)
->>>>>>> parent of 7ea873e (Update)
     button_5.place(x = 8, y = 370)
     #==========================================================================================>
     frame_3 = Frame(frame, width= "800", bg="light blue", height="530", relief="solid", borderwidth=2)
