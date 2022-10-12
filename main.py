@@ -26,8 +26,8 @@ from check_attendence import check_attendence
 
 def main_begin():
     def login():
-        window.destroy()
-        login_screen()
+        window.withdraw()
+        login_screen(window)
 
     
     def Attendence():
@@ -83,77 +83,81 @@ def main_begin():
     def check():
         attendance = Attendence()
         thongtin = attendance
-        text, duocdiemdanh= check_attendence(attendance)
-        attendence_window = Toplevel(window)
-        attendence_window.title("Hệ thống điểm danh")
-        attendence_window.geometry('500x600')
-        attendence_window.configure(background="orange")
+        text_no, diemdanh= check_attendence(attendance)
+        if (text_no != 'Unknown'):
+            attendence_window = Toplevel(window)
+            attendence_window.title("Hệ thống điểm danh")
+            attendence_window.geometry('500x600')
+            attendence_window.configure(background="orange")
 
-        bg_window = Image.open("./IconImage/login-back.png")
-        photo =  ImageTk.PhotoImage(bg_window)
-        bg_panel = Label(attendence_window, image=photo)
-        bg_panel.image = photo
-        bg_panel.pack(fill='both', expand="yes")
+            bg_window = Image.open("./IconImage/login-back.png")
+            photo =  ImageTk.PhotoImage(bg_window)
+            bg_panel = Label(attendence_window, image=photo)
+            bg_panel.image = photo
+            bg_panel.pack(fill='both', expand="yes")
 
-        frame_1 = Frame(attendence_window, width= "400", bg="black", height="500", relief="solid", borderwidth=2)
+            frame_1 = Frame(attendence_window, width= "400", bg="black", height="500", relief="solid", borderwidth=2)
 
-        frame_1.place(x = 50, y = 50)
-        if duocdiemdanh == False:
-            sign_in_image = Image.open('./IconImage/failed.jpg')
-            nofication = "Failed!"
+            frame_1.place(x = 50, y = 50)
+            if diemdanh == False:
+                sign_in_image = Image.open('./IconImage/failed.jpg')
+                nofication = "Failed!"
+            else:
+                sign_in_image = Image.open('./IconImage/success.png')
+                nofication = 'Success!'
+
+            photo = ImageTk.PhotoImage(sign_in_image)
+            sign_in_image_label = Label(frame_1, image=photo, bg='#040405')
+            sign_in_image_label.image = photo
+            sign_in_image_label.place(x=140, y=50)
+
+
+
+            sign_in_label = Label(frame_1, text=nofication, bg="#040405", fg="white",
+                                font=("yu gothic ui", 17, "bold"))
+
+            sign_in_label.place(x=150, y=160)
+
+
+            label_1 = Label(frame_1, text="MNV", bg="#040405", fg="white",
+                                    font=("yu gothic ui", 13, "bold"))
+            label_1.place(x=70, y=220)
+
+            label_1_entry = Label(frame_1, highlightthickness=1, relief=FLAT, bg="#040405", fg="white",
+                                        font=("yu gothic ui ", 12, "bold"))
+            label_1_entry.place(x=70, y=245, width=270)
+
+            label_2 = Label(frame_1, text="Họ và tên", bg="#040405", fg="white",
+                                    font=("yu gothic ui", 13, "bold"))
+            label_2.place(x=70, y=280)
+
+            label_2_entry = Label(frame_1, highlightthickness=1, relief=FLAT, bg="#040405", fg="white",
+                                        font=("yu gothic ui ", 12, "bold"))
+            label_2_entry.place(x=70, y=305, width=270)
+
+            label_3 = Label(frame_1, text="Thông tin", bg="#040405", fg="white",
+                                    font=("yu gothic ui", 13, "bold"))
+            label_3.place(x=70, y=340)
+
+            label_3_entry = Label(frame_1, highlightthickness=1, relief=FLAT, bg="#040405", fg="white",
+                                        font=("yu gothic ui ", 12, "bold"))
+            label_3_entry.place(x=70, y=365, width=270, height=110)
+
+            Id = thongtin.Id.values
+            df=pd.read_csv("StudentDetails\StudentDetails.csv")
+
+            aa= df.loc[df['Id'] == Id[0]].values
+            label_1_entry.configure(text=str(aa[0][0]))
+            label_2_entry.configure(text=str(aa[0][1]))
+            label_3_entry.configure(text=str(aa[0][2])) 
+
+            attendence_window.after(3000,lambda:attendence_window.destroy())
+            attendence_window.mainloop()
+
         else:
-            sign_in_image = Image.open('./IconImage/success.png')
-            nofication = 'Success!'
-
-        photo = ImageTk.PhotoImage(sign_in_image)
-        sign_in_image_label = Label(frame_1, image=photo, bg='#040405')
-        sign_in_image_label.image = photo
-        sign_in_image_label.place(x=140, y=50)
-
-
-
-        sign_in_label = Label(frame_1, text=nofication, bg="#040405", fg="white",
-							font=("yu gothic ui", 17, "bold"))
-
-        sign_in_label.place(x=150, y=160)
-
-
-        label_1 = Label(frame_1, text="MNV", bg="#040405", fg="white",
-								font=("yu gothic ui", 13, "bold"))
-        label_1.place(x=70, y=220)
-
-        label_1_entry = Label(frame_1, highlightthickness=1, relief=FLAT, bg="#040405", fg="white",
-                                    font=("yu gothic ui ", 12, "bold"))
-        label_1_entry.place(x=70, y=245, width=270)
-
-        label_2 = Label(frame_1, text="Họ và tên", bg="#040405", fg="white",
-								font=("yu gothic ui", 13, "bold"))
-        label_2.place(x=70, y=280)
-
-        label_2_entry = Label(frame_1, highlightthickness=1, relief=FLAT, bg="#040405", fg="white",
-                                    font=("yu gothic ui ", 12, "bold"))
-        label_2_entry.place(x=70, y=305, width=270)
-
-        label_3 = Label(frame_1, text="Thông tin", bg="#040405", fg="white",
-								font=("yu gothic ui", 13, "bold"))
-        label_3.place(x=70, y=340)
-
-        label_3_entry = Label(frame_1, highlightthickness=1, relief=FLAT, bg="#040405", fg="white",
-                                    font=("yu gothic ui ", 12, "bold"))
-        label_3_entry.place(x=70, y=365, width=270, height=110)
-
-        Id = thongtin.Id.values
-        df=pd.read_csv("StudentDetails\StudentDetails.csv")
-        aa= df.loc[df['Id'] == Id[0]].values
-
-        label_1_entry.configure(text=str(aa[0][0]))
-        label_2_entry.configure(text=str(aa[0][1]))
-        label_3_entry.configure(text=str(aa[0][2]))   
-
-        attendence_window.mainloop()
-
-
-    data_user = []
+            mbox.showerror("Error", "You're not employee")
+        
+    # data_user = []
 
     window = Tk()
     window.title("Hệ thống điểm danh")
@@ -166,13 +170,13 @@ def main_begin():
     bg_panel.image = photo
     bg_panel.pack(fill='both', expand="yes")
 
-    frame = Frame(window, width= "400", bg="black", height="500", relief="solid", borderwidth=2)
+    frame = Frame(window, width= "400", bg="#99FF66", height="500", relief="solid", borderwidth=2)
 
     frame.place(x = 50, y = 50)
 
     sign_in_image = Image.open('./IconImage/hyy.png')
     photo = ImageTk.PhotoImage(sign_in_image)
-    sign_in_image_label = Label(frame, image=photo, bg='#040405')
+    sign_in_image_label = Label(frame, image=photo, bg='#99FF66')
     sign_in_image_label.image = photo
     sign_in_image_label.place(x=125, y=50)
 
@@ -201,7 +205,7 @@ def main_begin():
 
     my_font=("yu gothic ui", 13, "bold") # display size and style
 
-    l1=tk.Label(frame,font=my_font,bg='black',fg='white')
+    l1=tk.Label(frame,font=my_font,bg='#99FF66',fg='black')
     l1.place(x=10, y=10)
     # l1.grid(row=1,column=1,padx=5,pady=25)
 
@@ -209,14 +213,14 @@ def main_begin():
 
     framelgn_button = Image.open('./IconImage/btn1.png')
     photo = ImageTk.PhotoImage(framelgn_button)
-    framelgn_button_label = Label(frame, image=photo, bg='#040405')
+    framelgn_button_label = Label(frame, image=photo, bg='#99FF66')
     framelgn_button_label.image = photo
     framelgn_button_label.place(x=46, y=200)
     framelogin = Button(framelgn_button_label, text='LOGIN', font=("yu gothic ui", 13, "bold"), width=25, bd=0,
                         bg='#3047ff', cursor='hand2', activebackground='#3047ff', fg='white', command=login)
     framelogin.place(x=20, y=10)
 
-    framelgn_button_label_1 = Label(frame, image=photo, bg='#040405')
+    framelgn_button_label_1 = Label(frame, image=photo, bg='#99FF66')
     framelgn_button_label_1.image = photo
     framelgn_button_label_1.place(x=46, y=270)
     frameattendence= Button(framelgn_button_label_1, text='ATTENDENCE', font=("yu gothic ui", 13, "bold"), width=25, bd=0,
@@ -224,9 +228,9 @@ def main_begin():
     frameattendence.place(x=20, y=10)
 
     forgot_button = Label(frame, text="*Login for admin only",
-                                font=("yu gothic ui", 13, "italic underline"), fg="white", relief=FLAT,
+                                font=("yu gothic ui", 13, "bold italic underline"), fg="black", relief=FLAT,
                                 activebackground="#040405"
-                                , borderwidth=0, background="#040405")
+                                , borderwidth=0, background="#99FF66")
     forgot_button.place(x=100, y=350)
 
     image = Image.open("IconImage/4.png")
@@ -235,7 +239,7 @@ def main_begin():
 
     img = ImageTk.PhotoImage(resize_image)  
 
-    button = Button(frame, command=window.destroy, text='OUT',fg = 'white',  font=('times',14,'bold'), image = img, borderwidth=0, bg ='#040405', compound = TOP)
+    button = Button(frame, command=window.destroy, text='Out',fg = 'black',  font=('times',14,'bold'), image = img, borderwidth=0, bg ='#99FF66', compound = TOP)
     button.place(x=300, y=410)
 
     window.mainloop()

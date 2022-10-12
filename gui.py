@@ -26,8 +26,8 @@ def text_to_speech(user_text):
     engine.say(user_text)
     engine.runAndWait()
 
-def openmain(data_user):
-    window = Tk()
+def openmain(data_user, login_old_window):
+    window = Toplevel()
     window.title("Hệ thống điểm danh")
     window.geometry('1000x700')
     window.configure(background="orange")
@@ -164,7 +164,7 @@ def openmain(data_user):
         Id=(txt.get())
         name=(txt2.get())
         thongtin = txt4.get()
-        if(is_number(Id) and name.isalpha()):
+        if(is_number(Id)):
             cam = cv2.VideoCapture(0)
             harcascadePath = "haarcascade_frontalface_default.xml"
             detector=cv2.CascadeClassifier(harcascadePath)
@@ -197,12 +197,12 @@ def openmain(data_user):
             csvFile.close()
             message.configure(text= res)
         else:
-            if(is_number(Id)):
+            if(is_number(Id) == False):
                 res = "Điền tên với chữ cái"
                 message.configure(text= res)
-            if(name.isalpha()):
-                res = "ID phải là số tự nhiên"
-                message.configure(text= res)
+            # if(name.isalpha()):
+            #     res = "ID phải là số tự nhiên"
+            #     message.configure(text= res)
         
     def TrainImages():
         recognizer = cv2.face_LBPHFaceRecognizer.create()#recognizer = cv2.face.LBPHFaceRecognizer_create()#$cv2.createLBPHFaceRecognizer()
@@ -273,14 +273,16 @@ def openmain(data_user):
     button_4 = Button(frame_2, text = '    Hỗ trợ   ', font=('times',12,'bold'), image = img_4, compound = TOP, bg ='white', borderwidth=0, command=support)
     button_4.place(x = 8, y = 250)
 
-
+    def dangxuat():
+        window.destroy()
+        login_old_window.deiconify()
     image_5 = Image.open("IconImage/4.png")
 
     resize_image_5 = image_5.resize((40, 40))
 
     img_5 = ImageTk.PhotoImage(resize_image_5)  
 
-    button_5 = Button(frame_2, command=window.destroy, text = '    Thoát    ', font=('times',12,'bold'), image = img_5, compound = TOP, bg ='white', borderwidth=0)
+    button_5 = Button(frame_2, command=dangxuat, text = '    Back    ', font=('times',12,'bold'), image = img_5, compound = TOP, bg ='white', borderwidth=0)
     button_5.place(x = 8, y = 370)
     #==========================================================================================>
     frame_3 = Frame(frame, width= "800", bg="light blue", height="530", relief="solid", borderwidth=2)

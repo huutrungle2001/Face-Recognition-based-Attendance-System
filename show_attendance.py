@@ -71,6 +71,23 @@ def thongke():
                     count_2 +=1
         return count, count_1, count_2, ten
 
+    def xemtatca():
+        root = tkinter.Tk()
+        grid = MagicGrid(root)
+        grid.pack(side="top", expand=1, fill="both")
+        count = 0
+        while True:
+            cs = f"./Attendance/Attendance_{Year}-{Month}.csv"
+            with io.open(cs, "r", newline="") as csv_file:
+                reader = csv.reader(csv_file)
+                for row in reader:
+                    grid.add_row(*row)
+            count +=1
+            if (count>=1):
+                    break       
+
+        root.mainloop()
+
     def xemthongke():
         Id = tx.get()
         if Id =="":
@@ -136,6 +153,20 @@ def thongke():
                 if (count>=1):
                     break
 
+    xtc = tk.Button(
+        window_thongke,
+        text="Xem tất cả",
+        command=xemtatca,
+        bd=7,
+        font=("times new roman", 15),
+        bg="black",
+        fg="white",
+        height=2,
+        width=12,
+        relief=RIDGE,
+    )
+    xtc.place(x=20, y=200)
+
     attf = tk.Button(
         window_thongke,
         text="Xem điểm danh",
@@ -193,4 +224,4 @@ def thongke():
     #     print("hehe")
 
 
-        
+            
