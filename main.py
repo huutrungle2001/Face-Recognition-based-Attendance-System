@@ -23,6 +23,7 @@ import tkinter.messagebox as mbox
 import io
 from login import login_screen
 from check_attendence import check_attendence
+import PySimpleGUI as sg
 
 def main_begin():
     def login():
@@ -162,7 +163,7 @@ def main_begin():
     window = Tk()
     window.title("Hệ thống điểm danh")
     window.geometry('500x600')
-    window.configure(background="orange")
+    window.configure(bg = '#add123')
 
     bg_window = Image.open("IconImage/login-back.png")
     photo =  ImageTk.PhotoImage(bg_window)
@@ -170,9 +171,19 @@ def main_begin():
     bg_panel.image = photo
     bg_panel.pack(fill='both', expand="yes")
 
+<<<<<<< HEAD
     frame = Frame(window, width= "400", bg="#99FF66", height="500", relief="solid", borderwidth=2)
 
+=======
+    frame = Frame(window, width= "400", bg="black", height="500", relief="solid", borderwidth=2)
+>>>>>>> 3428948d50290cbfc8884f69d3a6acc785672b2b
     frame.place(x = 50, y = 50)
+
+    # bg_window = Image.open("./IconImage/login-back.png")
+    # photo =  ImageTk.PhotoImage(bg_window)
+    # bg_panel = Label(frame, image=photo)
+    # bg_panel.image = photo
+    # bg_panel.pack(fill='both', expand="yes")
 
     sign_in_image = Image.open('./IconImage/hyy.png')
     photo = ImageTk.PhotoImage(sign_in_image)
@@ -219,6 +230,9 @@ def main_begin():
     framelogin = Button(framelgn_button_label, text='LOGIN', font=("yu gothic ui", 13, "bold"), width=25, bd=0,
                         bg='#3047ff', cursor='hand2', activebackground='#3047ff', fg='white', command=login)
     framelogin.place(x=20, y=10)
+    sg.change_look_and_feel('Light Brown 1')
+
+    background = sg.LOOK_AND_FEEL_TABLE['LightBrown1']['BACKGROUND']
 
     framelgn_button_label_1 = Label(frame, image=photo, bg='#99FF66')
     framelgn_button_label_1.image = photo
@@ -243,5 +257,6 @@ def main_begin():
     button.place(x=300, y=410)
 
     window.mainloop()
+
 
 main_begin()

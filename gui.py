@@ -26,7 +26,11 @@ def text_to_speech(user_text):
     engine.say(user_text)
     engine.runAndWait()
 
+<<<<<<< HEAD
 def openmain(data_user, login_old_window):
+=======
+def openmain(data_user,window_1):
+>>>>>>> 3428948d50290cbfc8884f69d3a6acc785672b2b
     window = Toplevel()
     window.title("Hệ thống điểm danh")
     window.geometry('1000x700')
@@ -273,16 +277,28 @@ def openmain(data_user, login_old_window):
     button_4 = Button(frame_2, text = '    Hỗ trợ   ', font=('times',12,'bold'), image = img_4, compound = TOP, bg ='white', borderwidth=0, command=support)
     button_4.place(x = 8, y = 250)
 
+<<<<<<< HEAD
     def dangxuat():
         window.destroy()
         login_old_window.deiconify()
+=======
+    
+
+>>>>>>> 3428948d50290cbfc8884f69d3a6acc785672b2b
     image_5 = Image.open("IconImage/4.png")
 
     resize_image_5 = image_5.resize((40, 40))
 
     img_5 = ImageTk.PhotoImage(resize_image_5)  
+    def dangxuat():
+        window_1.deiconify()
+        window.destroy()
 
+<<<<<<< HEAD
     button_5 = Button(frame_2, command=dangxuat, text = '    Back    ', font=('times',12,'bold'), image = img_5, compound = TOP, bg ='white', borderwidth=0)
+=======
+    button_5 = Button(frame_2, command=dangxuat, text = ' Đăng xuất ', font=('times',12,'bold'), image = img_5, compound = TOP, bg ='white', borderwidth=0)
+>>>>>>> 3428948d50290cbfc8884f69d3a6acc785672b2b
     button_5.place(x = 8, y = 370)
     #==========================================================================================>
     frame_3 = Frame(frame, width= "800", bg="light blue", height="530", relief="solid", borderwidth=2)
@@ -327,5 +343,4 @@ def openmain(data_user, login_old_window):
     trainImg.place(x=400, y=355)
     #==========================================================================================>
     window.mainloop()
-
 

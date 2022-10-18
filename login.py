@@ -21,7 +21,11 @@ import pyttsx3
 import tkinter.messagebox as mbox
 import io
 from gui import openmain
+<<<<<<< HEAD
 def login_screen(old_window):
+=======
+def login_screen(window_1):
+>>>>>>> 3428948d50290cbfc8884f69d3a6acc785672b2b
 	data_user = []
 
 	window = Toplevel()
@@ -73,11 +77,16 @@ def login_screen(old_window):
 					mbox.showerror("Error", "Sai mật khẩu hoặc tên tài khoản")
 				else:
 					mbox.showinfo("Information", "Đã đăng nhập được rồi nhé =))")
+<<<<<<< HEAD
 					username_entry.delete(0, 'end')
 					password_entry.delete(0, 'end')
 					window.withdraw()
 					openmain(data_user, window)
 					
+=======
+					window.withdraw()
+					openmain(data_user, window)
+>>>>>>> 3428948d50290cbfc8884f69d3a6acc785672b2b
 
 	frame = Frame(window, width= "630", bg="#99FF66", height="600", relief="solid", borderwidth=2)
 
@@ -171,16 +180,27 @@ def login_screen(old_window):
 	signup_button_label.place(x=320, y=485, width=111, height=35)
 
 	# =====================================================================
+<<<<<<< HEAD
 		
 		
 	def back():
 		window.destroy()
 		old_window.deiconify()
+=======
+	
+	def back():
+		window_1.deiconify()
+		window.destroy()
+>>>>>>> 3428948d50290cbfc8884f69d3a6acc785672b2b
 
 	image = Image.open("IconImage/4.png")
 	resize_image = image.resize((40, 40))
 	img = ImageTk.PhotoImage(resize_image)  
+<<<<<<< HEAD
 	button = Button(frame, command=back, text='Back',fg = 'black',  font=('times',14,'bold'), image = img, borderwidth=0, bg ='#99FF66', compound = TOP)
+=======
+	button = Button(frame, command=back, text='Back',fg = 'white',  font=('times',14,'bold'), image = img, borderwidth=0, bg ='#040405', compound = TOP)
+>>>>>>> 3428948d50290cbfc8884f69d3a6acc785672b2b
 	button.place(x=500, y=500)
 	
 	mainloop()
