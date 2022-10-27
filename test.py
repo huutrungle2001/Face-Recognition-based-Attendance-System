@@ -1,68 +1,49 @@
-import tkinter
-import cv2
+from ast import Try
+from binascii import b2a_hqx
+import PyPDF2
+from tkinter import *
+from tkinter import filedialog
+import tkinter as tk
+from turtle import left
+import datetime as dt
+from tkinter import messagebox
+from time import strftime
+from tkinter import Message ,Text
+import cv2,os
+import shutil
+import csv
+import numpy as np
+from PIL import Image, ImageTk
+import pandas as pd
+import datetime
 import time
-import PIL.Image, PIL.ImageTk
-import tkinter.messagebox
-class MyVideoCapture:
-    def __init__(self, video_source):
-        self.vid = cv2.VideoCapture(video_source)
-        if not self.vid.isOpened():
-            raise ValueError("Unable to open video source",video_source)
-        self.width = self.vid.get(cv2.CAP_PROP_FRAME_WIDTH)
-        self.height = self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
+import tkinter.ttk as ttk
+import tkinter.font as font
+import show_attendance
+import pyttsx3
+from tkPDFViewer import tkPDFViewer as pdf
+import os   
+import tkinter.messagebox as mbox
+import glob
+import io
 
-    def __del__(self):
-        if self.vid.isOpened():
-            self.vid.release()
+path = str("./TrainingImage/")
+imagePaths=[os.path.join(path,f) for f in os.listdir(path)] 
+#create empth face list
+faces=[]
+#create empty ID list
+Ids=[]
 
-    def get_frame(self):
-        if self.vid.isOpened():
-            ret, frame = self.vid.read()
-            frame = cv2.resize(frame,(640,480))
-            if ret:
-                return (ret, cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-            else:
-                return (ret,None)
-
-class App:
-    def __init__(self, window, window_title,video_source = 0, fpsLimit = 30):
-
-        self.window = window
-        self.window.title(window_title)
-
-        self.video_source = video_source
-        self.fpsLimit = fpsLimit
-
-        self.vid = MyVideoCapture(video_source)    
-        self.canvas = tkinter.Canvas(window, width = self.vid.width, height = self.vid.height)
-        self.canvas.pack()
-        self.btn_getvideo=tkinter.Button(window, text="getvideo", width=50, command=self.getvideo)
-        self.btn_getvideo.pack(anchor=tkinter.CENTER, expand=True)
-        self.delay = 1
-        self.update()
-
-        self.window.mainloop()
-    def getvideo(self):
-        start_time = time.time()
-        out = cv2.VideoWriter('output_'+time.strftime("%d-%m-%Y-%H-%M-%S")+'.avi', cv2.VideoWriter_fourcc(*'XVID'), 20.0, (640,480))
-
-        while int(time.time()-start_time) < self.fpsLimit:           
-            ret, frame = self.vid.get_frame()
-            if ret:
-                out.write(cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
-            else:
-                break
-        out.release()
-        # tkinter.messagebox.showinfo(title="Notification", message="save video successful")
-        print("success")
-        cv2.destroyAllWindows()
-
-
-    def update(self):
-        ret, frame = self.vid.get_frame()
-        if ret:
-            self.photo = PIL.ImageTk.PhotoImage(image = PIL.Image.fromarray(frame))
-            self.canvas.create_image(0, 0, image = self.photo, anchor = tkinter.NW)
-        self.window.after(self.delay, self.update)
-        
-App(tkinter.Tk(), "get_video",0,10)
+for imagePath in imagePaths:
+    print(imagePath)
+    #loading the image and converting it to gray scale
+    pilImage=Image.open(imagePath).convert('L')
+    #Now we are converting the PIL image into numpy array
+    imageNp=np.array(pilImage,'uint8')
+    #getting the Id from the image
+    Id=int(os.path.split(imagePath)[-1].split(".")[0])
+    # extract the face from the training image sample
+    faces.append(imageNp)
+    print(Id)
+    Ids.append(Id)
+print(Ids)

@@ -23,14 +23,15 @@ import tkinter.messagebox as mbox
 import io
 from login import login_screen
 from check_attendence import check_attendence
-import PySimpleGUI as sg
+import pandas as pd
+
+
 
 def main_begin():
     def login():
         window.withdraw()
         login_screen(window)
 
-    
     def Attendence():
         recognizer = cv2.face.LBPHFaceRecognizer_create()
         recognizer.read("TrainingImageLabel\Trainner.yml")
@@ -85,85 +86,85 @@ def main_begin():
         attendance = Attendence()
         thongtin = attendance
         text_no, diemdanh= check_attendence(attendance)
-        if (text_no != 'Unknown'):
-            attendence_window = Toplevel(window)
-            attendence_window.title("Hệ thống điểm danh")
-            attendence_window.geometry('500x600')
-            attendence_window.configure(background="orange")
+        # if (text_no != 'Unknown'):
+        #     attendence_window = Toplevel(window)
+        #     attendence_window.title("Hệ thống điểm danh")
+        #     attendence_window.geometry('500x600')
+        #     attendence_window.configure(background="orange")
 
-            bg_window = Image.open("./IconImage/login-back.png")
-            photo =  ImageTk.PhotoImage(bg_window)
-            bg_panel = Label(attendence_window, image=photo)
-            bg_panel.image = photo
-            bg_panel.pack(fill='both', expand="yes")
+        #     bg_window = Image.open("./IconImage/login-back.png")
+        #     photo =  ImageTk.PhotoImage(bg_window)
+        #     bg_panel = Label(attendence_window, image=photo)
+        #     bg_panel.image = photo
+        #     bg_panel.pack(fill='both', expand="yes")
 
-            frame_1 = Frame(attendence_window, width= "400", bg="black", height="500", relief="solid", borderwidth=2)
+        #     frame_1 = Frame(attendence_window, width= "400", bg="black", height="500", relief="solid", borderwidth=2)
 
-            frame_1.place(x = 50, y = 50)
-            if diemdanh == False:
-                sign_in_image = Image.open('./IconImage/failed.jpg')
-                nofication = "Failed!"
-            else:
-                sign_in_image = Image.open('./IconImage/success.png')
-                nofication = 'Success!'
+        #     frame_1.place(x = 50, y = 50)
+        #     if diemdanh == False:
+        #         sign_in_image = Image.open('./IconImage/failed.jpg')
+        #         nofication = "Failed!"
+        #     else:
+        #         sign_in_image = Image.open('./IconImage/success.png')
+        #         nofication = 'Success!'
 
-            photo = ImageTk.PhotoImage(sign_in_image)
-            sign_in_image_label = Label(frame_1, image=photo, bg='#040405')
-            sign_in_image_label.image = photo
-            sign_in_image_label.place(x=140, y=50)
-
-
-
-            sign_in_label = Label(frame_1, text=nofication, bg="#040405", fg="white",
-                                font=("yu gothic ui", 17, "bold"))
-
-            sign_in_label.place(x=150, y=160)
+        #     photo = ImageTk.PhotoImage(sign_in_image)
+        #     sign_in_image_label = Label(frame_1, image=photo, bg='#040405')
+        #     sign_in_image_label.image = photo
+        #     sign_in_image_label.place(x=140, y=50)
 
 
-            label_1 = Label(frame_1, text="MNV", bg="#040405", fg="white",
-                                    font=("yu gothic ui", 13, "bold"))
-            label_1.place(x=70, y=220)
 
-            label_1_entry = Label(frame_1, highlightthickness=1, relief=FLAT, bg="#040405", fg="white",
-                                        font=("yu gothic ui ", 12, "bold"))
-            label_1_entry.place(x=70, y=245, width=270)
+        #     sign_in_label = Label(frame_1, text=nofication, bg="#040405", fg="white",
+        #                         font=("yu gothic ui", 17, "bold"))
 
-            label_2 = Label(frame_1, text="Họ và tên", bg="#040405", fg="white",
-                                    font=("yu gothic ui", 13, "bold"))
-            label_2.place(x=70, y=280)
+        #     sign_in_label.place(x=150, y=160)
 
-            label_2_entry = Label(frame_1, highlightthickness=1, relief=FLAT, bg="#040405", fg="white",
-                                        font=("yu gothic ui ", 12, "bold"))
-            label_2_entry.place(x=70, y=305, width=270)
 
-            label_3 = Label(frame_1, text="Thông tin", bg="#040405", fg="white",
-                                    font=("yu gothic ui", 13, "bold"))
-            label_3.place(x=70, y=340)
+        #     label_1 = Label(frame_1, text="MNV", bg="#040405", fg="white",
+        #                             font=("yu gothic ui", 13, "bold"))
+        #     label_1.place(x=70, y=220)
 
-            label_3_entry = Label(frame_1, highlightthickness=1, relief=FLAT, bg="#040405", fg="white",
-                                        font=("yu gothic ui ", 12, "bold"))
-            label_3_entry.place(x=70, y=365, width=270, height=110)
+        #     label_1_entry = Label(frame_1, highlightthickness=1, relief=FLAT, bg="#040405", fg="white",
+        #                                 font=("yu gothic ui ", 12, "bold"))
+        #     label_1_entry.place(x=70, y=245, width=270)
 
-            Id = thongtin.Id.values
-            df=pd.read_csv("StudentDetails\StudentDetails.csv")
+        #     label_2 = Label(frame_1, text="Họ và tên", bg="#040405", fg="white",
+        #                             font=("yu gothic ui", 13, "bold"))
+        #     label_2.place(x=70, y=280)
 
-            aa= df.loc[df['Id'] == Id[0]].values
-            label_1_entry.configure(text=str(aa[0][0]))
-            label_2_entry.configure(text=str(aa[0][1]))
-            label_3_entry.configure(text=str(aa[0][2])) 
+        #     label_2_entry = Label(frame_1, highlightthickness=1, relief=FLAT, bg="#040405", fg="white",
+        #                                 font=("yu gothic ui ", 12, "bold"))
+        #     label_2_entry.place(x=70, y=305, width=270)
 
-            attendence_window.after(3000,lambda:attendence_window.destroy())
-            attendence_window.mainloop()
+        #     label_3 = Label(frame_1, text="Thông tin", bg="#040405", fg="white",
+        #                             font=("yu gothic ui", 13, "bold"))
+        #     label_3.place(x=70, y=340)
 
-        else:
-            mbox.showerror("Error", "You're not employee")
+        #     label_3_entry = Label(frame_1, highlightthickness=1, relief=FLAT, bg="#040405", fg="white",
+        #                                 font=("yu gothic ui ", 12, "bold"))
+        #     label_3_entry.place(x=70, y=365, width=270, height=110)
+
+        #     Id = thongtin.Id.values
+        #     df=pd.read_csv("StudentDetails\StudentDetails.csv")
+
+        #     aa= df.loc[df['Id'] == Id[0]].values
+        #     label_1_entry.configure(text=str(aa[0][0]))
+        #     label_2_entry.configure(text=str(aa[0][1]))
+        #     label_3_entry.configure(text=str(aa[0][2])) 
+
+        #     attendence_window.after(3000,lambda:attendence_window.destroy())
+        #     attendence_window.mainloop()
+
+        # else:
+        #     mbox.showerror("Error", "You're not employee")
         
     # data_user = []
 
     window = Tk()
     window.title("Hệ thống điểm danh")
     window.geometry('500x600')
-    window.configure(bg = '#add123')
+    window.configure(background="orange")
 
     bg_window = Image.open("IconImage/login-back.png")
     photo =  ImageTk.PhotoImage(bg_window)
@@ -171,19 +172,9 @@ def main_begin():
     bg_panel.image = photo
     bg_panel.pack(fill='both', expand="yes")
 
-<<<<<<< HEAD
     frame = Frame(window, width= "400", bg="#99FF66", height="500", relief="solid", borderwidth=2)
 
-=======
-    frame = Frame(window, width= "400", bg="black", height="500", relief="solid", borderwidth=2)
->>>>>>> 3428948d50290cbfc8884f69d3a6acc785672b2b
     frame.place(x = 50, y = 50)
-
-    # bg_window = Image.open("./IconImage/login-back.png")
-    # photo =  ImageTk.PhotoImage(bg_window)
-    # bg_panel = Label(frame, image=photo)
-    # bg_panel.image = photo
-    # bg_panel.pack(fill='both', expand="yes")
 
     sign_in_image = Image.open('./IconImage/hyy.png')
     photo = ImageTk.PhotoImage(sign_in_image)
@@ -205,12 +196,14 @@ def main_begin():
         date = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
         timeStamp = datetime.datetime.fromtimestamp(ts).strftime('%H:%M:%S')
         Hour,Minute,Second=timeStamp.split(":")
+        
+        time_attendence = ['07', '00', '00', '17', '00', '00']
 
-        if  Hour == "07" and Minute == "00" and Second == "00":
+        if  Hour == time_attendence[0] and Minute == time_attendence[1] and Second == time_attendence[2]:
 
             text_to_speech("Start to work now!")
 
-        elif  Hour == "17" and Minute == "00" and Second == "00":
+        elif  Hour == time_attendence[3] and Minute == time_attendence[4] and Second == time_attendence[5]:
 
             text_to_speech("Start to work now!")
 
@@ -230,9 +223,6 @@ def main_begin():
     framelogin = Button(framelgn_button_label, text='LOGIN', font=("yu gothic ui", 13, "bold"), width=25, bd=0,
                         bg='#3047ff', cursor='hand2', activebackground='#3047ff', fg='white', command=login)
     framelogin.place(x=20, y=10)
-    sg.change_look_and_feel('Light Brown 1')
-
-    background = sg.LOOK_AND_FEEL_TABLE['LightBrown1']['BACKGROUND']
 
     framelgn_button_label_1 = Label(frame, image=photo, bg='#99FF66')
     framelgn_button_label_1.image = photo
@@ -257,6 +247,5 @@ def main_begin():
     button.place(x=300, y=410)
 
     window.mainloop()
-
 
 main_begin()

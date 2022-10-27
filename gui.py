@@ -1,3 +1,4 @@
+from ast import Try
 from binascii import b2a_hqx
 import PyPDF2
 from tkinter import *
@@ -20,17 +21,20 @@ import tkinter.ttk as ttk
 import tkinter.font as font
 import show_attendance
 import pyttsx3
+from tkPDFViewer import tkPDFViewer as pdf
+import os   
+import tkinter.messagebox as mbox
+import glob
+import io
 
 def text_to_speech(user_text):
     engine = pyttsx3.init()
     engine.say(user_text)
     engine.runAndWait()
 
-<<<<<<< HEAD
+
 def openmain(data_user, login_old_window):
-=======
-def openmain(data_user,window_1):
->>>>>>> 3428948d50290cbfc8884f69d3a6acc785672b2b
+
     window = Toplevel()
     window.title("Hệ thống điểm danh")
     window.geometry('1000x700')
@@ -61,6 +65,9 @@ def openmain(data_user,window_1):
     )
     a.place(x=280, y=20)
 
+    time_to_attendence = ['07', '00', '00', '17', '0', '0']
+
+
     def my_time():
         time_string = strftime('%H:%M:%S %p \n %A \n %x') # time format 
         l1.config(text=time_string)
@@ -70,9 +77,9 @@ def openmain(data_user,window_1):
         date = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
         timeStamp = datetime.datetime.fromtimestamp(ts).strftime('%H:%M:%S')
         Hour,Minute,Second=timeStamp.split(":")
-        if  Hour == "07" and Minute == "00" and Second == "00":
+        if  Hour == time_to_attendence[0] and Minute == time_to_attendence[1] and Second == time_to_attendence[2]:
             text_to_speech("Start to work now!")
-        elif  Hour == "17" and Minute == "00" and Second == "00":
+        elif  Hour == time_to_attendence[0] and Minute == time_to_attendence[0] and Second == time_to_attendence[0]:
             text_to_speech("Start to work now!")
         
     my_font=('times',12,'bold') # display size and style
@@ -94,6 +101,108 @@ def openmain(data_user,window_1):
     lb.place(x = 830, y = 10)
 
     #==========================================================================================>
+
+
+
+    def delete_employee():
+        win_delete = Tk()
+        # windo.iconbitmap("AMS.ico")
+        win_delete.title("Chỉnh thời gian ra vào")
+        win_delete.geometry("600x300")
+        win_delete.resizable(0, 0)
+        win_delete.configure(background="light blue")
+        
+        def xoa():
+            id = tx.get()
+            if (id == ''):
+                t="Hãy điền id của bạn của bạn!!!"
+                mbox.showwarning("Nofication", t)
+            else: 
+                count = 0
+                done = False
+                ishave = False
+                cs = f"./StudentDetails/StudentDetails.csv"
+                with io.open(cs, "r", newline="",encoding='utf8') as csv_file:
+                    data = csv.reader(csv_file)
+                    for row in data:
+                        if (row[0] == id):
+
+                            ishave = True
+
+                if (ishave == True):
+                    while True:
+                        data = pd.read_csv('./StudentDetails/EmployeerAccount.csv')
+                        data = data[data.Id != int(id)]
+                        os.makedirs('./StudentDetails/', exist_ok=True)  
+                        data.to_csv('./StudentDetails/EmployeerAccount.csv', index=False) 
+
+                        data = pd.read_csv('./StudentDetails/StudentDetails.csv')
+                        data = data[data.Id != int(id)]
+                        os.makedirs('./StudentDetails/', exist_ok=True)  
+                        data.to_csv('./StudentDetails/StudentDetails.csv', index=False)
+              
+                        folder_path = (r'./TrainingImage/')
+                        #using listdir() method to list the files of the folder
+                        test = os.listdir(folder_path)
+                        #taking a loop to remove all the images
+                        #using ".png" extension to remove only png images
+                        #using os.remove() method to remove the files
+                        for images in test:
+                            if images.startswith(f' {id}'):
+                                os.remove(os.path.join(folder_path, images))
+
+                        done = True
+                        
+                        count +=1
+                        if (count>=1):
+                                break
+                    if done == True :
+                        mbox.showinfo("Thành công", 'Đã xóa thành công')
+                    else:
+                        mbox.showerror("Lỗi", "Xóa không thành công")
+                else:
+                    mbox.showerror("Lỗi", "Id không có trong danh sách nhân viên")
+
+        tx = tk.Entry(
+            win_delete,
+            width=15,
+            bd=5,
+            bg="black",
+            fg="white",
+            relief=RIDGE,
+            font=("times", 30, "bold")
+            )
+        tx.place(x=190, y=100)
+
+        sub = tk.Label(
+            win_delete,
+            text="ID",
+            width=10,
+            height=2,
+            bg="black",
+            fg="white",
+            bd=5,
+            relief=RIDGE,
+            font=("times new roman", 15),
+        )
+        sub.place(x=50, y=100)
+        fill_a = tk.Button(
+            win_delete,
+            text="Xóa",
+            command=xoa,
+            bd=7,
+            font=("times new roman", 15),
+            bg="black",
+            fg="white",
+            height=2,
+            width=10,
+            relief=RIDGE,
+        )
+        fill_a.place(x=195, y=200)
+
+        win_delete.mainloop()
+
+
     def show_thongke():
         show_attendance.thongke()
     #==========================================================================================>
@@ -128,6 +237,7 @@ def openmain(data_user,window_1):
 
         return False
     #==========================================================================================>
+
     def support():
         win= Tk()
         #Set the Geometry
@@ -135,38 +245,21 @@ def openmain(data_user,window_1):
         #Create a Text Box
         text= Text(win,width= 80,height=30)
         text.pack(pady=20)
-
-        def clear_text():
-            text.delete(1.0, END)
-
-        def quit_app():
-            window.destroy()
-
-        def open_pdf():
-            file= filedialog.askopenfilename(title="Select a PDF", filetype=(("PDF    Files","*.pdf"),("All Files","*.*")))
-            if file:
-                #Open the PDF File
-                pdf_file= PyPDF2.PdfFileReader(file)
-                #Select a Page to read
-                page= pdf_file.getPage(0    )
-                #Get the content of the Page
-                content=page.extractText()
-                #Add the content to TextBox
-                text.insert(1.0,content)  
-
-        my_menu= Menu(win)
-        win.config(menu=my_menu)
-        #Add dropdown to the Menus
-        file_menu=Menu(my_menu,tearoff=False)
-        my_menu.add_cascade(label="File",menu= file_menu)
-        file_menu.add_command(label="Open",command=open_pdf)
-        file_menu.add_command(label="Clear",command=clear_text)
-        file_menu.add_command(label="Quit",command=quit_app)
+        #Open the PDF File
+        pdf_file= PyPDF2.PdfFileReader("ReadPDF/1.pdf")
+        #Select a Page to read
+        page= pdf_file.getPage(0)
+        #Get the content of the Page
+        content=page.extractText()
+        #Add the content to TextBox
+        text.insert(1.0,content)
         win.mainloop()
+
     #==========================================================================================>
+
     def TakeImages():        
         Id=(txt.get())
-        name=(txt2.get())
+        name=txt2.get()
         thongtin = txt4.get()
         if(is_number(Id)):
             cam = cv2.VideoCapture(0)
@@ -182,7 +275,7 @@ def openmain(data_user,window_1):
                     #incrementing sample number 
                     sampleNum=sampleNum+1
                     #saving the captured face in the dataset folder TrainingImage
-                    cv2.imwrite("TrainingImage\ "+name +"."+Id +'.'+ str(sampleNum) + ".jpg", gray[y:y+h,x:x+w])
+                    cv2.imwrite("TrainingImage\ "+ Id +'.'+ str(sampleNum) + ".jpg", gray[y:y+h,x:x+w])
                     #display the frame
                     cv2.imshow('frame',img)
                 #wait for 100 miliseconds 
@@ -193,10 +286,10 @@ def openmain(data_user,window_1):
                     break
             cam.release()
             cv2.destroyAllWindows() 
-            res = "Ảnh lưu với ID : " + Id +" Tên : "+ name
-            row = [Id , name, thongtin]
+            res = "Ảnh lưu với ID : " + Id +" Tên : "
+            row = [Id , str(name), thongtin]
             with open('StudentDetails\StudentDetails.csv','a+') as csvFile:
-                writer = csv.writer(csvFile)
+                writer = csv.writer(csvFile, lineterminator='\n')
                 writer.writerow(row)
             csvFile.close()
             message.configure(text= res)
@@ -212,9 +305,10 @@ def openmain(data_user,window_1):
         recognizer = cv2.face_LBPHFaceRecognizer.create()#recognizer = cv2.face.LBPHFaceRecognizer_create()#$cv2.createLBPHFaceRecognizer()
         harcascadePath = "haarcascade_frontalface_default.xml"
         detector =cv2.CascadeClassifier(harcascadePath)
-        faces,Id = getImagesAndLabels("TrainingImage")
+        faces,Id = getImagesAndLabels("./TrainingImage/")
         recognizer.train(faces, np.array(Id))
-        recognizer.save("TrainingImageLabel\Trainner.yml")
+        recognizer.save("TrainingImageLabel/Trainner.yml")
+        print( str(Id[0]) + "hehe")
         res = "Ảnh đã train"#+",".join(str(f) for f in Id)
         message.configure(text= res)
 
@@ -229,15 +323,16 @@ def openmain(data_user,window_1):
         Ids=[]
         #now looping through all the image paths and loading the Ids and the images
         for imagePath in imagePaths:
+            print(imagePath)
             #loading the image and converting it to gray scale
             pilImage=Image.open(imagePath).convert('L')
             #Now we are converting the PIL image into numpy array
             imageNp=np.array(pilImage,'uint8')
             #getting the Id from the image
-            Id=int(os.path.split(imagePath)[-1].split(".")[1])
+            Id=int(os.path.split(imagePath)[-1].split(".")[0])
             # extract the face from the training image sample
             faces.append(imageNp)
-            Ids.append(Id)        
+            Ids.append(Id)    
         return faces,Ids
     #==========================================================================================>
     #==========================================================================================>
@@ -265,41 +360,40 @@ def openmain(data_user,window_1):
     img_3 = ImageTk.PhotoImage(resize_image_3)  
 
     button_3 = Button(frame_2, command= show_thongke, text = ' Thống kê ', font=('times',12,'bold'), image = img_3, compound = TOP, bg ='white', borderwidth=0)
-    button_3.place(x = 8, y = 130)
+    button_3.place(x = 8, y = 110)
 
-
-    image_4 = Image.open("IconImage/5.png")
+    image_4 = Image.open("IconImage/delete.png")
 
     resize_image_4 = image_4.resize((40, 40))
 
     img_4 = ImageTk.PhotoImage(resize_image_4)  
 
-    button_4 = Button(frame_2, text = '    Hỗ trợ   ', font=('times',12,'bold'), image = img_4, compound = TOP, bg ='white', borderwidth=0, command=support)
-    button_4.place(x = 8, y = 250)
+    button_4= Button(frame_2, text = '     Xóa     ', command= delete_employee, font=('times',12,'bold'), image = img_4, compound = TOP, bg ='white', borderwidth=0)
+    button_4.place(x = 8, y = 210)
 
-<<<<<<< HEAD
-    def dangxuat():
-        window.destroy()
-        login_old_window.deiconify()
-=======
-    
-
->>>>>>> 3428948d50290cbfc8884f69d3a6acc785672b2b
-    image_5 = Image.open("IconImage/4.png")
+    image_5 = Image.open("IconImage/5.png")
 
     resize_image_5 = image_5.resize((40, 40))
 
     img_5 = ImageTk.PhotoImage(resize_image_5)  
-    def dangxuat():
-        window_1.deiconify()
-        window.destroy()
 
-<<<<<<< HEAD
-    button_5 = Button(frame_2, command=dangxuat, text = '    Back    ', font=('times',12,'bold'), image = img_5, compound = TOP, bg ='white', borderwidth=0)
-=======
-    button_5 = Button(frame_2, command=dangxuat, text = ' Đăng xuất ', font=('times',12,'bold'), image = img_5, compound = TOP, bg ='white', borderwidth=0)
->>>>>>> 3428948d50290cbfc8884f69d3a6acc785672b2b
-    button_5.place(x = 8, y = 370)
+    button_5 = Button(frame_2, text = '    Hỗ trợ   ', font=('times',12,'bold'), image = img_5, compound = TOP, bg ='white', borderwidth=0, command=support)
+    button_5.place(x = 8, y = 310)
+
+
+    def dangxuat():
+        window.destroy()
+        login_old_window.deiconify()
+
+    image_6 = Image.open("IconImage/4.png")
+
+    resize_image_6 = image_6.resize((40, 40))
+
+    img_6 = ImageTk.PhotoImage(resize_image_6)  
+
+    button_6 = Button(frame_2, command=dangxuat, text = ' Đăng xuất ', font=('times',12,'bold'), image = img_6, compound = TOP, bg ='white', borderwidth=0)
+
+    button_6.place(x = 8, y = 410)
     #==========================================================================================>
     frame_3 = Frame(frame, width= "800", bg="light blue", height="530", relief="solid", borderwidth=2)
 
