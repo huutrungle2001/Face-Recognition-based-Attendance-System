@@ -286,7 +286,7 @@ def openmain(data_user, login_old_window):
                     break
             cam.release()
             cv2.destroyAllWindows() 
-            res = "Ảnh lưu với ID : " + Id +" Tên : "
+            res = "Ảnh lưu với ID : " + Id
             row = [Id , str(name), thongtin]
             with open('StudentDetails\StudentDetails.csv','a+') as csvFile:
                 writer = csv.writer(csvFile, lineterminator='\n')
